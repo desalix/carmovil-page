@@ -1,11 +1,22 @@
 @import "tailwindcss";
+@import "@fontsource-variable/archivo/wdth.css";
 
 @theme {
   --color-brand: #00A19C;
-  --color-brand-dark: #00a89c;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --color-brand-dark: #00706C;
+  --color-asphalt: #1C2124;
+  --color-concrete: #EEF0EF;
+  --font-sans: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+  border-radius: 2px;
 }

@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { name, foundedYear } from '../data/business';
+
+const facts = [
+	{ label: 'Desde', value: `Agosto de ${foundedYear}` },
+	{ label: 'Marcas', value: 'Todas, también híbridos' },
+	{ label: 'Abierto', value: 'Los siete días de la semana' },
+	{ label: 'Diagnóstico', value: 'Maquinaria propia de alta calidad' },
+];
+---
+
+<Layout
+	title={`Nosotros | ${name}`}
+	description={`${name} es un taller multimarca familiar en Tres Cantos desde ${foundedYear}.`}
+>
+	<section class="bg-concrete py-20 md:py-28">
+		<div class="mx-auto grid max-w-6xl gap-14 px-5 lg:grid-cols-[1fr_22rem] lg:gap-20">
+			<div>
+				<h1 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">
+					Un taller familiar desde {foundedYear}
+				</h1>
+				<p class="mt-8 max-w-2xl text-2xl leading-snug font-medium text-asphalt">
+					Nuestros clientes nos conocen por nuestra seriedad, honestidad y veracidad.
+				</p>
+				<div class="mt-8 max-w-152 space-y-5 leading-relaxed text-zinc-700">
+					<p>
+						{name} es una empresa familiar. Abrimos el taller en agosto de {foundedYear} y desde entonces
+						reparamos coches de todas las marcas en Tres Cantos.
+					</p>
+					<p>
+						Nos ocupamos de todo el coche: revisiones, elementos de desgaste, PRE-ITV, mantenimiento dentro y fuera
+						de garantía, electricidad y electrónica, inyección diésel y gasolina, frenos y reparaciones complejas.
+						También reparamos coches híbridos.
+					</p>
+					<p>La nave está equipada con maquinaria de alta calidad para el diagnóstico de fallos.</p>
+				</div>
+			</div>
+
+			<aside class="lg:sticky lg:top-24 lg:self-start">
+				<dl class="rounded-lg bg-brand-dark p-8 text-gray-100">
+					{facts.map((fact, i) => (
+						<div class:list={['py-4 first:pt-0 last:pb-0', i > 0 && 'border-t border-asphalt/20']}>
+							<dt class="text-sm font-semibold">{fact.label}</dt>
+							<dd class="mt-1 text-xl leading-snug font-bold font-stretch-semi-expanded">{fact.value}</dd>
+						</div>
+					))}
+				</dl>
+			</aside>
+		</div>
+	</section>
+</Layout>
