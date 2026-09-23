@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import logo from '../assets/logo.png';
-import { name, address, email, hoursSummary, foundedYear } from '../data/business';
+import { name, address, email, hours, foundedYear } from '../data/business';
 
 const year = new Date().getFullYear();
 ---
@@ -28,10 +28,10 @@ const year = new Date().getFullYear();
 		<div>
 			<h2 class="font-semibold text-white">Horario</h2>
 			<dl class="mt-3 space-y-1.5 text-sm">
-				{hoursSummary.map((h) => (
+				{hours.map((h) => (
 					<div>
 						<dt class="inline">{h.days}:</dt>{' '}
-						<dd class="inline tabular-nums">{h.time}</dd>
+						<dd class="inline tabular-nums">{h.times.length === 0 ? 'Cerrado' : h.times.join(' y ')}</dd>
 					</div>
 				))}
 			</dl>

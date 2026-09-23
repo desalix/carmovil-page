@@ -16,18 +16,9 @@ export const phoneHref = 'tel:+34918034353';
 // Déjalo vacío ('') para no mostrarlo.
 export const email = '';
 
-// Lunes a domingo, en orden. Horas en formato 24 h.
-export const week = [
-	{ day: 'Lunes', open: 8, close: 18 },
-	{ day: 'Martes', open: 8, close: 18 },
-	{ day: 'Miércoles', open: 8, close: 18 },
-	{ day: 'Jueves', open: 8, close: 18 },
-	{ day: 'Viernes', open: 8, close: 18 },
-	{ day: 'Sábado', open: 8, close: 17 },
-	{ day: 'Domingo', open: 8, close: 17 },
-];
-
-export const hoursSummary = [
-	{ days: 'Lunes a viernes', time: '8:00 – 18:00' },
-	{ days: 'Sábados y domingos', time: '8:00 – 17:00' },
+// Horario. Cada fila tiene uno o varios tramos; sin tramos se muestra "Cerrado".
+export const hours = [
+	{ days: 'Lunes a jueves', times: ['8:00 – 13:00', '14:00 – 18:00'] },
+	{ days: 'Viernes', times: ['8:00 – 15:00'] },
+	{ days: 'Fin de semana', times: [] },
 ];
