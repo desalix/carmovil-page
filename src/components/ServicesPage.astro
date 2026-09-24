@@ -53,7 +53,7 @@ const jsonLd = {
 		/>
 		<div class="absolute inset-0 bg-linear-to-r from-asphalt/95 via-asphalt/75 to-asphalt/30" aria-hidden="true"></div>
 		<div class="relative mx-auto max-w-6xl px-5">
-			<h1 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Servicios</h1>
+			<h2 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Servicios</h2>
 			<p class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-200">
 				Reparamos y mantenemos coches de todas las marcas, también híbridos, dentro y fuera del periodo de garantía.
 				Elige un servicio para ver qué incluye y cuándo conviene traer el coche.
@@ -97,12 +97,12 @@ const jsonLd = {
 
 			<!-- Servicio elegido -->
 			<article class="max-w-2xl" data-service-article>
-				<h2 class="text-3xl font-extrabold tracking-tight font-stretch-expanded outline-none md:text-4xl" tabindex="-1">
+				<h1 class="text-3xl font-extrabold tracking-tight font-stretch-expanded outline-none md:text-4xl" tabindex="-1">
 					{service.title} en Tres Cantos
-				</h2>
+				</h1>
 				<p class="mt-5 text-lg leading-relaxed text-zinc-700">{service.intro}</p>
 
-				<h3 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">Qué incluye</h3>
+				<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">Qué incluye</h2>
 				<ul class="mt-5 space-y-3">
 					{service.includes.map((item) => (
 						<li class="flex gap-3 leading-relaxed">
@@ -112,7 +112,7 @@ const jsonLd = {
 					))}
 				</ul>
 
-				<h3 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">Cuándo traer el coche</h3>
+				<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">Cuándo traer el coche</h2>
 				<ul class="mt-5 list-disc space-y-3 pl-5 leading-relaxed marker:text-brand">
 					{service.whenToCome.map((item) => <li>{item}</li>)}
 				</ul>
@@ -185,7 +185,7 @@ const jsonLd = {
 				const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 				article.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
 			}
-			article.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+			article.querySelector<HTMLElement>('h1')?.focus({ preventScroll: true });
 		} catch {
 			// Si algo falla, navegación normal.
 			location.href = url;
