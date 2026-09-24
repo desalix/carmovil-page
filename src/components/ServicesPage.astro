@@ -1,0 +1,211 @@
+---
+// Página de servicios: introducción general, selector de servicio y detalle del servicio elegido.
+// La usan /servicios (abre el primero) y /servicios/<slug>.
+import { Image } from 'astro:assets';
+import Layout from '../layouts/Layout.astro';
+import headerPhoto from '../assets/media/aux/taller2.jpg';
+import WrenchIcon from './WrenchIcon.astro';
+import { services, type Service } from '../data/services';
+import { name, address, phone, phoneHref } from '../data/business';
+
+interface Props {
+	service: Service;
+	title: string;
+	description: string;
+}
+
+const { service, title, description } = Astro.props;
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Service',
+	name: service.title,
+	description: service.metaDescription,
+	areaServed: 'Tres Cantos, Madrid',
+	provider: {
+		'@type': 'AutoRepair',
+		name,
+		telephone: phone,
+		address: {
+			'@type': 'PostalAddress',
+			streetAddress: address.street,
+			addressLocality: 'Tres Cantos',
+			addressRegion: 'Madrid',
+			addressCountry: 'ES',
+		},
+	},
+};
+---
+
+<Layout title={title} description={description}>
+	<script id="service-jsonld" type="application/ld+json" slot="head" set:html={JSON.stringify(jsonLd)} />
+
+	<section class="relative overflow-hidden bg-asphalt py-14 text-white md:py-20">
+		<Image
+			src={headerPhoto}
+			alt=""
+			width={2400}
+			widths={[800, 1600, 2400]}
+			sizes="100vw"
+			loading="eager"
+			fetchpriority="high"
+			class="absolute inset-0 size-full object-cover object-[center_64%]"
+		/>
+		<div class="absolute inset-0 bg-linear-to-r from-asphalt/95 via-asphalt/75 to-asphalt/30" aria-hidden="true"></div>
+		<div class="relative mx-auto max-w-6xl px-5">
+			<h1 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Servicios</h1>
+			<p class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-200">
+				Reparamos y mantenemos coches de todas las marcas, también híbridos, dentro y fuera del periodo de garantía.
+				Elige un servicio para ver qué incluye y cuándo conviene traer el coche.
+			</p>
+		</div>
+	</section>
+
+	<section class="py-14 md:py-20">
+		<div class="mx-auto grid max-w-6xl gap-10 px-5 lg:grid-cols-[16rem_1fr] lg:gap-16">
+			<!-- Selector de servicio -->
+			<aside>
+				<label for="service-select" class="font-bold lg:hidden">Elige un servicio</label>
+				<select
+					id="service-select"
+					class="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-3 font-medium lg:hidden"
+				>
+					{services.map((s) => (
+						<option value={`/servicios/${s.slug}`} selected={s.slug === service.slug}>
+							{s.title}
+						</option>
+					))}
+				</select>
+
+				<nav aria-label="Servicios" class="hidden lg:sticky lg:top-24 lg:block">
+					<ul class="border-l-2 border-zinc-200">
+						{services.map((s) => (
+							<li>
+								<a
+									href={`/servicios/${s.slug}`}
+									data-service-link
+									aria-current={s.slug === service.slug ? 'page' : undefined}
+									class="-ml-0.5 block border-l-2 border-transparent py-2 pl-4 text-zinc-600 transition-colors hover:text-asphalt aria-[current=page]:border-brand aria-[current=page]:font-semibold aria-[current=page]:text-asphalt"
+								>
+									{s.title}
+								</a>
+							</li>
+						))}
+					</ul>
+				</nav>
+			</aside>
+
+			<!-- Servicio elegido -->
+			<article class="max-w-2xl" data-service-article>
+				<h2 class="text-3xl font-extrabold tracking-tight font-stretch-expanded outline-none md:text-4xl" tabindex="-1">
+					{service.title} en Tres Cantos
+				</h2>
+				<p class="mt-5 text-lg leading-relaxed text-zinc-700">{service.intro}</p>
+
+				<h3 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">Qué incluye</h3>
+				<ul class="mt-5 space-y-3">
+					{service.includes.map((item) => (
+						<li class="flex gap-3 leading-relaxed">
+							<WrenchIcon class="mt-0.5 size-5 shrink-0 text-brand" />
+							{item}
+						</li>
+					))}
+				</ul>
+
+				<h3 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">Cuándo traer el coche</h3>
+				<ul class="mt-5 list-disc space-y-3 pl-5 leading-relaxed marker:text-brand">
+					{service.whenToCome.map((item) => <li>{item}</li>)}
+				</ul>
+
+				<div class="mt-14 rounded-lg bg-brand-dark p-8 text-white">
+					<p class="text-xl font-bold font-stretch-semi-expanded">Pide cita por teléfono</p>
+					<a href={phoneHref} class="mt-3 block text-3xl font-black tabular-nums font-stretch-expanded hover:underline">
+						{phone}
+					</a>
+					<p class="mt-4 text-white/85">{address.street}, {address.city}</p>
+				</div>
+			</article>
+		</div>
+	</section>
+</Layout>
+
+<script>
+	// Cambiar de servicio sin recargar la página.
+	// Cada servicio sigue teniendo su propia URL con la página completa (para Google y para abrir enlaces directos);
+	// aquí descargamos esa página, cambiamos solo el contenido del servicio y actualizamos la URL.
+	const article = document.querySelector<HTMLElement>('[data-service-article]');
+	const links = document.querySelectorAll<HTMLAnchorElement>('[data-service-link]');
+	const select = document.getElementById('service-select') as HTMLSelectElement | null;
+	const pages = new Map<string, Promise<Document>>();
+
+	const normalize = (path: string) => path.replace(/\/+$/, '') || '/';
+
+	function load(url: string) {
+		let page = pages.get(url);
+		if (!page) {
+			page = fetch(url)
+				.then((res) => {
+					if (!res.ok) throw new Error(`HTTP ${res.status}`);
+					return res.text();
+				})
+				.then((html) => new DOMParser().parseFromString(html, 'text/html'));
+			page.catch(() => pages.delete(url));
+			pages.set(url, page);
+		}
+		return page;
+	}
+
+	async function show(url: string, push: boolean) {
+		if (!article) return;
+		try {
+			const doc = await load(url);
+			const next = doc.querySelector('[data-service-article]');
+			if (!next) throw new Error('Sin contenido de servicio');
+
+			article.innerHTML = next.innerHTML;
+			document.title = doc.title;
+			const description = doc.querySelector('meta[name="description"]')?.getAttribute('content');
+			if (description) document.querySelector('meta[name="description"]')?.setAttribute('content', description);
+			const jsonLd = doc.getElementById('service-jsonld')?.textContent;
+			const currentJsonLd = document.getElementById('service-jsonld');
+			if (jsonLd && currentJsonLd) currentJsonLd.textContent = jsonLd;
+
+			// El servicio activo lo marca la página descargada (en /servicios es el primero).
+			const activeHref = doc.querySelector('[data-service-link][aria-current="page"]')?.getAttribute('href');
+			const activePath = activeHref ? normalize(new URL(activeHref, location.href).pathname) : '';
+			links.forEach((link) => {
+				if (normalize(link.pathname) === activePath) link.setAttribute('aria-current', 'page');
+				else link.removeAttribute('aria-current');
+			});
+			if (select && activePath) select.value = activePath;
+
+			if (push) history.pushState({}, '', url);
+
+			if (article.getBoundingClientRect().top < 0) {
+				const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+				article.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' });
+			}
+			article.querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+		} catch {
+			// Si algo falla, navegación normal.
+			location.href = url;
+		}
+	}
+
+	links.forEach((link) => {
+		link.addEventListener('click', (event) => {
+			// Ctrl/Cmd/clic central: abrir en otra pestaña como siempre.
+			if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+			event.preventDefault();
+			if (normalize(link.pathname) !== normalize(location.pathname)) show(link.href, true);
+		});
+		// Descarga la página al pasar el ratón, para que el cambio sea instantáneo.
+		link.addEventListener('pointerenter', () => load(link.href), { once: true });
+		link.addEventListener('focus', () => load(link.href), { once: true });
+	});
+
+	select?.addEventListener('change', () => show(select.value, true));
+
+	// Botones atrás/adelante del navegador.
+	window.addEventListener('popstate', () => show(location.href, false));
+</script>

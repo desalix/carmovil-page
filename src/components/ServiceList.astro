@@ -1,0 +1,20 @@
+---
+import WrenchIcon from './WrenchIcon.astro';
+import { services } from '../data/services';
+---
+
+<ul class="grid border-t-2 border-brand md:grid-cols-2 md:gap-x-16">
+	{services.map((service) => (
+		<li class="border-b border-zinc-200">
+			<a href={`/servicios/${service.slug}`} class="group flex gap-4 py-6">
+				<WrenchIcon class="mt-0.5 size-6 shrink-0 text-brand" />
+				<div>
+					<h3 class="text-xl font-bold font-stretch-semi-expanded group-hover:text-brand-dark">
+						{service.title}
+					</h3>
+					<p class="mt-1.5 text-zinc-600">{service.summary}</p>
+				</div>
+			</a>
+		</li>
+	))}
+</ul>

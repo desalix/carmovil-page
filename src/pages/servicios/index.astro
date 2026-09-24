@@ -1,0 +1,12 @@
+---
+import ServicesPage from '../../components/ServicesPage.astro';
+import { services } from '../../data/services';
+import { name } from '../../data/business';
+---
+
+<!-- /servicios abre el primer servicio de la lista. -->
+<ServicesPage
+	service={services[0]}
+	title={`Servicios de taller en Tres Cantos | ${name}`}
+	description="Cambio de aceite, revisiones, PRE-ITV, diagnóstico, frenos, inyección, electricidad y coches híbridos. Taller multimarca en Tres Cantos desde 1991."
+/>

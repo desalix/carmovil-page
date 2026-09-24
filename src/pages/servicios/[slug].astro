@@ -1,0 +1,22 @@
+---
+import type { GetStaticPaths } from 'astro';
+import ServicesPage from '../../components/ServicesPage.astro';
+import { services, type Service } from '../../data/services';
+import { name } from '../../data/business';
+
+// Una página estática por servicio: /servicios/cambio-de-aceite, /servicios/frenos...
+export const getStaticPaths = (() =>
+	services.map((service) => ({ params: { slug: service.slug }, props: { service } }))) satisfies GetStaticPaths;
+
+interface Props {
+	service: Service;
+}
+
+const { service } = Astro.props;
+---
+
+<ServicesPage
+	service={service}
+	title={`${service.title} en Tres Cantos | ${name}`}
+	description={service.metaDescription}
+/>
