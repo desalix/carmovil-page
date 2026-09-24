@@ -20,15 +20,24 @@ const services = [
 	{ title: 'Mecánica general', description: 'Desde el mantenimiento diario hasta reparaciones complejas.' },
 	{ title: 'Coches híbridos', description: 'También reparamos y mantenemos vehículos híbridos.' },
 ];
+
+// Cualquier logo que se añada a src/assets/media/colab aparece solo. El nombre del archivo es el texto alternativo.
+const partnerFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/media/colab/*.{svg,png,jpg,jpeg,webp}', {
+	eager: true,
+});
+const partners = Object.entries(partnerFiles).map(([path, mod]) => {
+	const file = path.split('/').pop()!.replace(/\.[^.]+$/, '');
+	return { src: mod.default, name: file.charAt(0).toUpperCase() + file.slice(1) };
+});
 ---
 
 <Layout title={`${name} | Taller mecánico en Tres Cantos`}>
 	<!-- Hero -->
 	<section class="relative bg-concrete">
-		<div class="mx-auto grid max-w-6xl px-5 lg:grid-cols-2">
+		<div class="mx-auto grid max-w-6xl lg:grid-cols-2">
 			<div class="py-18 md:py-20 lg:py-32 lg:pr-14">
-				<h1 class="text-[2.6rem] leading-[1.02] font-black tracking-tight font-stretch-expanded sm:text-6xl lg:text-[4.25rem]">
-					Taller Tres Cantos
+				<h1 class="text-[2.6rem] leading-[1.2] font-black tracking-tight font-stretch-expanded sm:text-6xl lg:text-[4rem]">
+					AUTOTALLER CARMOVIL
 				</h1>
 				<p class="mt-7 max-w-136 text-lg leading-relaxed text-zinc-500">
 					Mantenimiento, diagnóstico y reparación de cualquier marca, también híbridos. Un taller familiar desde {foundedYear}.
@@ -82,6 +91,22 @@ const services = [
 			</p>
 		</div>
 	</section>
+
+	<!-- Colaboradores -->
+	{partners.length > 0 && (
+		<section class="bg-concrete py-16">
+			<div class="mx-auto max-w-6xl px-5 text-center">
+				<h2 class="text-2xl font-extrabold tracking-tight font-stretch-expanded">Colaboramos con</h2>
+				<ul class="mt-10 flex flex-wrap items-center justify-center gap-x-16 gap-y-10">
+					{partners.map((p) => (
+						<li>
+							<Image src={p.src} alt={p.name} class="h-36 w-auto" />
+						</li>
+					))}
+				</ul>
+			</div>
+		</section>
+	)}
 
 	<!-- Contacto -->
 	<section id="contacto" class="scroll-mt-16 py-20 md:py-28">

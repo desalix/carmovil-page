@@ -18,7 +18,7 @@ export const email = '';
 
 // Horario. Cada fila tiene uno o varios tramos; sin tramos se muestra "Cerrado".
 export const hours = [
-	{ days: 'Lunes a jueves', times: ['8:00 – 13:00', '14:00 – 18:00'] },
+	{ days: 'Lunes a jueves', times: ['8:00 – 14:00', '15:00 – 18:00'] },
 	{ days: 'Viernes', times: ['8:00 – 15:00'] },
 	{ days: 'Fin de semana', times: [] },
 ];

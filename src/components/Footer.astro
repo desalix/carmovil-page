@@ -13,7 +13,7 @@ const year = new Date().getFullYear();
 				<Image src={logo} alt={name} class="h-14 w-auto brightness-0 invert" />
 			</a>
 			<p class="mt-4 max-w-xs text-sm leading-relaxed text-zinc-400">
-				Taller multimarca familiar en Tres Cantos desde {foundedYear}.
+				Taller multimarca en Tres Cantos desde {foundedYear}.
 			</p>
 		</div>
 
@@ -31,7 +31,7 @@ const year = new Date().getFullYear();
 				{hours.map((h) => (
 					<div>
 						<dt class="inline">{h.days}:</dt>{' '}
-						<dd class="inline tabular-nums">{h.times.length === 0 ? 'Cerrado' : h.times.join(' y ')}</dd>
+						<dd class="inline tabular-nums">{h.times.length === 0 ? 'Cerrado' : h.times.join(' & ')}</dd>
 					</div>
 				))}
 			</dl>
