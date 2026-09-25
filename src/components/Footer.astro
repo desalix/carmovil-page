@@ -8,12 +8,13 @@ const year = new Date().getFullYear();
 ---
 
 <footer class="bg-asphalt text-zinc-300">
-	<div class="mx-auto grid max-w-6xl gap-8 px-3 py-14 md:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
+	<!-- En móvil (una columna) todo va centrado; desde md, alineado a la izquierda. -->
+	<div class="mx-auto grid max-w-6xl justify-items-center gap-8 px-3 py-14 text-center md:grid-cols-2 md:justify-items-start md:text-left lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
 		<div>
 			<a href="/" class="inline-block">
 				<Image src={logo} alt={`${name}, inicio`} class="h-14 w-auto brightness-0 invert" />
 			</a>
-			<p class="mt-4 max-w-xs text-sm leading-relaxed text-zinc-400">
+			<p class="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-zinc-400 md:mx-0">
 				Taller mecánico multimarca en Tres Cantos desde {foundedYear}.
 			</p>
 		</div>
@@ -60,7 +61,7 @@ const year = new Date().getFullYear();
 	</div>
 
 	<div class="border-t border-white/10">
-		<p class="mx-auto max-w-6xl px-5 py-6 text-xs text-zinc-500">
+		<p class="mx-auto max-w-6xl px-5 py-6 text-center text-xs text-zinc-500 md:text-left">
 			© {year} {name}
 		</p>
 	</div>
