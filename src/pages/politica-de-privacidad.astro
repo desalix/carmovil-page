@@ -1,0 +1,114 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { name, email } from '../data/business';
+---
+
+<Layout
+	title={`Política de privacidad | ${name}`}
+	description="Política de privacidad de Autotalleres Carmovil: responsable del tratamiento, finalidad, legitimación y derechos del usuario."
+>
+	<section class="py-20 md:py-28">
+		<article class="mx-auto max-w-3xl px-5">
+			<h1 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Política de privacidad</h1>
+			<p class="mt-4 text-sm text-zinc-500">Última actualización: 25 de septiembre de 2026</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">1. Responsable del tratamiento</h2>
+			<dl class="mt-4 space-y-2 leading-relaxed text-zinc-700">
+				<div><dt class="inline font-semibold text-asphalt">Identidad:</dt> <dd class="inline">Autotaller Carmovil SL</dd></div>
+				<div><dt class="inline font-semibold text-asphalt">CIF/NIF:</dt> <dd class="inline">B80112287</dd></div>
+				<div>
+					<dt class="inline font-semibold text-asphalt">Dirección:</dt>
+					<dd class="inline">Calle La Fragua 12, 28760 Tres Cantos, Madrid</dd>
+				</div>
+				<div>
+					<dt class="inline font-semibold text-asphalt">Correo electrónico:</dt>
+					<dd class="inline">
+						<a
+							href={`mailto:${email}`}
+							class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt"
+						>
+							{email}
+						</a>
+					</dd>
+				</div>
+				<div><dt class="inline font-semibold text-asphalt">Sitio web:</dt> <dd class="inline">www.autotallerescarmovil.es</dd></div>
+			</dl>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">2. Datos personales que recopilamos</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				En www.autotallerescarmovil.es recopilamos los siguientes datos personales:
+			</p>
+			<p class="mt-4 leading-relaxed text-zinc-700">No se recopilan datos personales.</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">3. Finalidad del tratamiento</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Los datos personales facilitados se tratan con las siguientes finalidades:
+			</p>
+			<ul class="mt-4 list-disc space-y-3 pl-5 leading-relaxed text-zinc-700 marker:text-brand">
+				<li>Gestión de consultas y solicitudes de información.</li>
+			</ul>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">4. Legitimación</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">La base legal para el tratamiento de sus datos es:</p>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				El consentimiento del interesado (art. 6.1.a del Reglamento (UE) 2016/679).
+			</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">5. Destinatarios</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Sus datos podrán ser comunicados a los siguientes prestadores de servicios:
+			</p>
+			<p class="mt-4 leading-relaxed text-zinc-700">No se ceden datos a terceros.</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">6. Transferencias internacionales</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				No se realizan transferencias de datos fuera del Espacio Económico Europeo.
+			</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">7. Plazo de conservación</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Los datos personales se conservarán mientras se mantenga la relación y no se solicite su supresión, y en cualquier
+				caso durante los plazos legales de prescripción que resulten de aplicación.
+			</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">8. Derechos del usuario</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Puede ejercer los siguientes derechos ante el responsable del tratamiento:
+			</p>
+			<ul class="mt-4 list-disc space-y-3 pl-5 leading-relaxed text-zinc-700 marker:text-brand">
+				<li>Derecho de acceso (art. 15 RGPD)</li>
+				<li>Derecho de rectificación (art. 16 RGPD)</li>
+				<li>Derecho de supresión (art. 17 RGPD)</li>
+				<li>Derecho de limitación del tratamiento (art. 18 RGPD)</li>
+				<li>Derecho de portabilidad (art. 20 RGPD)</li>
+				<li>Derecho de oposición (art. 21 RGPD)</li>
+			</ul>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Para ejercer estos derechos, envía un correo a{' '}
+				<a
+					href={`mailto:${email}`}
+					class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt"
+				>
+					{email}
+				</a>{' '}
+				indicando tu solicitud y adjuntando copia de tu documento identificativo.
+			</p>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (<a
+					href="https://www.aepd.es"
+					target="_blank"
+					rel="noopener"
+					class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt"
+					>www.aepd.es</a
+				>) si consideras que el tratamiento no se ajusta a la normativa.
+			</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">9. Modificaciones</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Autotaller Carmovil SL se reserva el derecho a modificar la presente política de privacidad para adaptarla a
+				novedades legislativas o jurisprudenciales. Se recomienda revisar esta página periódicamente. Los cambios entrarán
+				en vigor desde su publicación en el sitio web.
+			</p>
+		</article>
+	</section>
+</Layout>

@@ -61,8 +61,15 @@ const year = new Date().getFullYear();
 	</div>
 
 	<div class="border-t border-white/10">
-		<p class="mx-auto max-w-6xl px-5 py-6 text-center text-xs text-zinc-500 md:text-left">
-			© {year} {name}
-		</p>
+		<div class="mx-auto flex max-w-6xl flex-col items-center gap-3 px-5 py-6 text-xs text-zinc-500 md:flex-row md:justify-between">
+			<p>© {year} {name}</p>
+			<nav aria-label="Legal">
+				<ul class="flex flex-wrap justify-center gap-x-5 gap-y-2">
+					<li><a href="/aviso-legal" class="hover:text-zinc-300">Aviso legal</a></li>
+					<li><a href="/politica-de-privacidad" class="hover:text-zinc-300">Política de privacidad</a></li>
+					<li><a href="/politica-de-cookies" class="hover:text-zinc-300">Política de cookies</a></li>
+				</ul>
+			</nav>
+		</div>
 	</div>
 </footer>

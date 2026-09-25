@@ -1,0 +1,128 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { name, email, phoneHref } from '../data/business';
+---
+
+<Layout
+	title={`Aviso legal | ${name}`}
+	description="Aviso legal de Autotalleres Carmovil: datos identificativos del titular, condiciones de uso y política de enlaces."
+>
+	<section class="py-20 md:py-28">
+		<article class="mx-auto max-w-3xl px-5">
+			<h1 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Aviso legal</h1>
+			<p class="mt-4 text-sm text-zinc-500">Última actualización: 25 de septiembre de 2026</p>
+
+			<p class="mt-8 leading-relaxed text-zinc-700">
+				En cumplimiento de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y de Comercio
+				Electrónico (LSSI-CE), se exponen a continuación los datos identificativos del titular de este sitio web.
+			</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">1. Datos identificativos</h2>
+			<dl class="mt-4 space-y-2 leading-relaxed text-zinc-700">
+				<div><dt class="inline font-semibold text-asphalt">Titular:</dt> <dd class="inline">Autotaller Carmovil SL</dd></div>
+				<div><dt class="inline font-semibold text-asphalt">CIF/NIF:</dt> <dd class="inline">B80112287</dd></div>
+				<div>
+					<dt class="inline font-semibold text-asphalt">Domicilio:</dt>
+					<dd class="inline">Calle La Fragua 12, 28760 Tres Cantos, Madrid</dd>
+				</div>
+				<div>
+					<dt class="inline font-semibold text-asphalt">Correo electrónico:</dt>
+					<dd class="inline">
+						<a
+							href={`mailto:${email}`}
+							class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt"
+						>
+							{email}
+						</a>
+					</dd>
+				</div>
+				<div><dt class="inline font-semibold text-asphalt">Sitio web:</dt> <dd class="inline">www.autotallerescarmovil.es</dd></div>
+				<div>
+					<dt class="inline font-semibold text-asphalt">Teléfono:</dt>
+					<dd class="inline">
+						<a
+							href={phoneHref}
+							class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt"
+						>
+							+34918034353
+						</a>
+					</dd>
+				</div>
+				<div>
+					<dt class="inline font-semibold text-asphalt">Datos registrales:</dt>
+					<dd class="inline">Registro Mercantil de Madrid</dd>
+				</div>
+			</dl>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">2. Objeto</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				El presente sitio web tiene por objeto la presentación e información de los servicios profesionales prestados por
+				el titular, así como facilitar el contacto con los usuarios interesados en dichos servicios.
+			</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">3. Propiedad intelectual e industrial</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Todos los contenidos de este sitio web —textos, fotografías, gráficos, imágenes, tecnología, software, diseño
+				gráfico, código fuente y demás elementos— son propiedad intelectual de Autotaller Carmovil SL o de terceros que han
+				autorizado su uso, sin que puedan entenderse cedidos al usuario ninguno de los derechos de explotación reconocidos
+				por la normativa vigente en materia de propiedad intelectual e industrial.
+			</p>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Queda expresamente prohibida la reproducción total o parcial de los contenidos de este sitio web, su
+				transformación, distribución, comunicación pública, puesta a disposición, extracción y/o reutilización, salvo
+				autorización expresa del titular.
+			</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">4. Condiciones de uso</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				El acceso y uso de este sitio web atribuye la condición de usuario e implica la aceptación plena y sin reservas de
+				todas las disposiciones incluidas en este aviso legal. El usuario se compromete a hacer un uso adecuado de los
+				contenidos y servicios que Autotaller Carmovil SL ofrece a través de su sitio web y, con carácter enunciativo pero
+				no limitativo, a no emplearlos para:
+			</p>
+			<ul class="mt-4 list-disc space-y-3 pl-5 leading-relaxed text-zinc-700 marker:text-brand">
+				<li>Incurrir en actividades ilícitas, ilegales o contrarias a la buena fe y al orden público.</li>
+				<li>
+					Difundir contenidos o propaganda de carácter racista, xenófobo, pornográfico o que atenten contra la dignidad de
+					las personas.
+				</li>
+				<li>Provocar daños en los sistemas físicos y lógicos del titular o de sus proveedores.</li>
+				<li>
+					Introducir o difundir virus informáticos o cualquier otro sistema físico o lógico que sea susceptible de provocar
+					daños en los sistemas de Autotaller Carmovil SL o de terceros.
+				</li>
+			</ul>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">5. Exclusión de responsabilidad</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				Autotaller Carmovil SL no se hace responsable de los daños y perjuicios de cualquier naturaleza que pudieran
+				derivarse del acceso o del uso de los contenidos del sitio web, en particular los derivados de:
+			</p>
+			<ul class="mt-4 list-disc space-y-3 pl-5 leading-relaxed text-zinc-700 marker:text-brand">
+				<li>La falta de disponibilidad, mantenimiento y efectivo funcionamiento del sitio web o de sus servicios y contenidos.</li>
+				<li>La existencia de virus, programas maliciosos o lesivos en los contenidos.</li>
+				<li>El uso ilícito, negligente, fraudulento o contrario al presente aviso legal.</li>
+				<li>
+					La falta de licitud, calidad, fiabilidad, utilidad y disponibilidad de los servicios prestados por terceros y
+					puestos a disposición de los usuarios en el sitio web.
+				</li>
+			</ul>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">6. Política de enlaces</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				El sitio web puede contener enlaces a páginas de terceros. Autotaller Carmovil SL no asume ninguna responsabilidad
+				por el contenido, informaciones o servicios que aparezcan en dichos sitios, que tendrán exclusivamente carácter
+				informativo y no implican relación alguna entre Autotaller Carmovil SL y las personas o entidades titulares de
+				tales contenidos o titulares de los sitios donde se encuentren.
+			</p>
+
+			<h2 class="mt-12 text-2xl font-extrabold font-stretch-semi-expanded">7. Legislación aplicable y jurisdicción</h2>
+			<p class="mt-4 leading-relaxed text-zinc-700">
+				La relación entre Autotaller Carmovil SL y el usuario se regirá por la legislación española vigente. Para la
+				resolución de cualquier controversia que pudiera surgir en relación con el presente sitio web, las partes se
+				someten a los Juzgados y Tribunales competentes conforme a la normativa aplicable, sin perjuicio de las normas de
+				protección de los consumidores y usuarios que resulten imperativas.
+			</p>
+		</article>
+	</section>
+</Layout>
