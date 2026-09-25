@@ -66,16 +66,29 @@ const jsonLd = {
 			<!-- Selector de servicio -->
 			<aside>
 				<label for="service-select" class="font-bold lg:hidden">Elige un servicio</label>
-				<select
-					id="service-select"
-					class="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-3 font-medium lg:hidden"
-				>
-					{services.map((s) => (
-						<option value={`/servicios/${s.slug}`} selected={s.slug === service.slug}>
-							{s.title}
-						</option>
-					))}
-				</select>
+				<!-- Mismo estilo que el servicio activo de la lista de escritorio: borde teal a la izquierda y negrita. -->
+				<div class="relative mt-2 lg:hidden">
+					<select
+						id="service-select"
+						class="service-select w-full appearance-none rounded-md border border-l-4 border-zinc-300 border-l-brand bg-white py-3 pr-11 pl-4 font-semibold text-asphalt"
+					>
+						{services.map((s) => (
+							<option value={`/servicios/${s.slug}`} selected={s.slug === service.slug}>
+								{s.title}
+							</option>
+						))}
+					</select>
+					<svg
+						class="pointer-events-none absolute top-1/2 right-4 size-5 -translate-y-1/2 text-brand-dark"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						aria-hidden="true"
+					>
+						<path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" />
+					</svg>
+				</div>
 
 				<nav aria-label="Servicios" class="hidden lg:sticky lg:top-24 lg:block">
 					<ul class="border-l-2 border-zinc-200">
@@ -205,6 +218,17 @@ const jsonLd = {
 	});
 
 	select?.addEventListener('change', () => show(select.value, true));
+
+	// Volver a tocar el desplegable abierto lo cierra (en móvil, sin esto se cerraba y se volvía a abrir).
+	// Solo al tocar la caja del desplegable: los toques en las opciones tienen que seguir funcionando.
+	select?.addEventListener(
+		'pointerdown',
+		(event) => {
+			const onOption = (event.target as Element).closest('option');
+			if (select.matches(':open') && !onOption) event.preventDefault();
+		},
+		{ capture: true },
+	);
 
 	// Botones atrás/adelante del navegador.
 	window.addEventListener('popstate', () => show(location.href, false));
