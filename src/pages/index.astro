@@ -2,9 +2,31 @@
 import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import ServiceList from '../components/ServiceList.astro';
+import Reviews from '../components/Reviews.astro';
 import hero from '../assets/hero.jpg';
 import oilChange from '../assets/media/aux/taller1.jpg';
+import mechanic from '../assets/media/aux/taller2.jpg';
 import { name, address, phone, phoneHref, mapsEmbedUrl, hours, foundedYear } from '../data/business';
+
+// Cómo trabajamos: es un proceso en orden, por eso va numerado.
+const steps = [
+	{
+		title: 'Te escuchamos',
+		text: 'Nos cuentas qué notas y cuándo pasa. Muchas veces ahí está la primera pista.',
+	},
+	{
+		title: 'Diagnosticamos antes de cambiar nada',
+		text: 'Revisamos el coche y usamos maquinaria de diagnosis para encontrar la causa, no solo el síntoma.',
+	},
+	{
+		title: 'Te damos presupuesto',
+		text: 'Te explicamos qué hace falta, qué puede esperar y cuánto cuesta. No empezamos sin tu visto bueno.',
+	},
+	{
+		title: 'Reparamos y te lo contamos',
+		text: 'Hacemos el trabajo acordado y, cuando recoges el coche, te explicamos qué hemos hecho y qué vigilar.',
+	},
+];
 
 // Cualquier logo que se añada a src/assets/media/colab aparece solo. El nombre del archivo es el texto alternativo.
 const partnerFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/media/colab/*.{svg,png,jpg,jpeg,webp}', {
@@ -43,36 +65,74 @@ const partners = Object.entries(partnerFiles).map(([path, mod]) => {
 		</div>
 	</section>
 
-	<!-- Servicios -->
-	<section id="servicios" class="scroll-mt-16 py-20 md:py-28">
-		<div class="mx-auto max-w-6xl px-5">
-			<div class="grid items-end gap-5 lg:grid-cols-2">
-				<h2 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Servicios</h2>
+	<!-- Cómo trabajamos -->
+	<section class="bg-asphalt py-20 text-white md:py-28">
+		<div class="mx-auto grid max-w-6xl gap-14 px-5 lg:grid-cols-[5fr_7fr] lg:gap-20">
+			<div>
+				<h2 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Cómo trabajamos</h2>
+				<p class="mt-8 text-2xl leading-snug font-medium">
+					Un coche bien cuidado gasta menos, dura más y te deja tirado menos veces.
+				</p>
+				<div class="mt-6 space-y-5 leading-relaxed text-zinc-300">
+					<p>
+						Muchas averías caras empiezan como un aviso pequeño: un ruido nuevo, un testigo en el cuadro, una mancha
+						debajo del coche. Revisarlo a tiempo casi siempre sale más barato que repararlo tarde.
+					</p>
+					<p>
+						Seguir el plan de mantenimiento del fabricante, también mientras el coche está en garantía, es la forma más
+						sencilla de cuidarlo. Y la más segura para ti y para quien viaja contigo.
+					</p>
+				</div>
 			</div>
 
-			<div class="mt-12">
-				<ServiceList />
-			</div>
-
-			<p class="mt-10 text-lg text-zinc-700">
-				¿No ves lo que necesitas?{' '}
-				<a href="#contacto" class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt">
-					Pregúntanos
-				</a>.
-			</p>
+			<ol class="border-t border-white/15">
+				{steps.map((step, i) => (
+					<li class="grid grid-cols-[3.5rem_1fr] gap-x-4 border-b border-white/15 py-7">
+						<span class="text-3xl leading-none font-black text-brand tabular-nums font-stretch-expanded" aria-hidden="true">
+							{i + 1}
+						</span>
+						<div>
+							<h3 class="text-xl font-bold font-stretch-semi-expanded">{step.title}</h3>
+							<p class="mt-2 leading-relaxed text-zinc-300">{step.text}</p>
+						</div>
+					</li>
+				))}
+			</ol>
 		</div>
 	</section>
 
-	<!-- Foto -->
-	<Image
-		src={oilChange}
-		alt="Mecánico rellenando el aceite del motor de un coche"
-		width={2560}
-		widths={[640, 1280, 1920, 2560]}
-		sizes="100vw"
-		class="h-72 w-full object-cover md:h-112"
-	/>
+	<!-- Servicios -->
+	<section id="servicios" class="relative scroll-mt-16">
+		<!-- Foto a sangre por la izquierda en escritorio (como el hero, pero al otro lado). En móvil no se muestra: quedaría pegada a la foto del hero. -->
+		<div class="hidden lg:absolute lg:inset-y-0 lg:left-0 lg:block lg:w-[calc(50%-2rem)]">
+			<Image
+				src={mechanic}
+				alt="Mecánico revisando el motor de un coche"
+				width={1440}
+				widths={[640, 960, 1440]}
+				sizes="50vw"
+				class="h-full w-full object-cover object-[center_40%]"
+			/>
+		</div>
 
+		<div class="mx-auto grid max-w-6xl px-5 lg:grid-cols-2">
+			<div class="py-16 md:py-20 lg:col-start-2 lg:py-28 lg:pl-8">
+				<h2 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Servicios</h2>
+
+				<div class="mt-12">
+					<ServiceList />
+				</div>
+
+				<p class="mt-10 text-lg text-zinc-700">
+					¿No ves lo que necesitas?{' '}
+					<a href="#contacto" class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt">
+						Pregúntanos
+					</a>.
+				</p>
+			</div>
+		</div>
+	</section>
+	
 	<!-- Colaboradores -->
 	{partners.length > 0 && (
 		<section class="bg-concrete py-16">
@@ -137,4 +197,7 @@ const partners = Object.entries(partnerFiles).map(([path, mod]) => {
 				referrerpolicy="no-referrer-when-downgrade"></iframe>
 		</div>
 	</section>
+
+	<!-- Reseñas -->
+	<Reviews />
 </Layout>

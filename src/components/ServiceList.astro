@@ -3,7 +3,7 @@ import WrenchIcon from './WrenchIcon.astro';
 import { services } from '../data/services';
 ---
 
-<ul class="grid border-t-2 border-brand md:grid-cols-2 md:gap-x-16">
+<ul class="border-t-2 border-brand">
 	{services.map((service) => (
 		<li class="border-b border-zinc-200">
 			<a href={`/servicios/${service.slug}`} class="group flex gap-4 py-6">

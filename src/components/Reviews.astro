@@ -1,0 +1,106 @@
+---
+// Reseñas de Google en carrusel automático: 4 a la vez en pantallas grandes (3, 2 y 1 en más pequeñas).
+// Avanza solo cada pocos segundos; se pausa mientras el ratón está encima o alguien lo desliza con el dedo.
+import { reviews, googleProfileUrl } from '../data/reviews';
+
+const starPath =
+	'M12 2.5l2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95L12 2.5z';
+---
+
+<section class="bg-concrete py-20 md:py-28" aria-labelledby="reviews-title">
+	<div class="mx-auto max-w-7xl px-5">
+		<h2 id="reviews-title" class="text-center text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">
+			Lo que dicen nuestros clientes
+		</h2>
+
+		<div class="mt-12" data-carousel>
+			<ul
+				data-track
+				class="-m-3 flex snap-x snap-mandatory scroll-p-3 gap-6 overflow-x-auto p-3 scrollbar-none [&::-webkit-scrollbar]:hidden"
+			>
+				{reviews.map((review) => (
+					<li class="shrink-0 basis-[85%] snap-start sm:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)] xl:basis-[calc((100%-4.5rem)/4)]">
+						<a
+							href={review.url}
+							target="_blank"
+							rel="noopener"
+							class="flex h-full flex-col items-center rounded-lg bg-white p-6 text-center ring-1 ring-zinc-200 transition-shadow hover:ring-2 hover:ring-brand"
+						>
+							<p class="font-bold">{review.author}</p>
+							<div class="mt-2 flex items-center gap-2">
+								<span class="flex gap-0.5" role="img" aria-label={`${review.rating} de 5 estrellas`}>
+									{[1, 2, 3, 4, 5].map((n) => (
+										<svg
+											class:list={['size-4', n <= review.rating ? 'text-[#FBBC04]' : 'text-zinc-300']}
+											viewBox="0 0 24 24"
+											fill="currentColor"
+											aria-hidden="true"
+										>
+											<path d={starPath} />
+										</svg>
+									))}
+								</span>
+								<span class="text-sm text-zinc-500">{review.date}</span>
+							</div>
+							<p class="mt-4 line-clamp-8 leading-relaxed whitespace-pre-line text-zinc-700">{review.text}</p>
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
+
+		<p class="mt-10 text-center">
+			<a
+				href={googleProfileUrl}
+				target="_blank"
+				rel="noopener"
+				class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt"
+			>
+				Ver todas las reseñas en Google
+			</a>
+		</p>
+	</div>
+</section>
+
+<script>
+	const AUTOPLAY_MS = 2000;
+	// Tras deslizarlo con el dedo, espera un poco antes de volver a moverse solo.
+	const RESUME_AFTER_TOUCH_MS = 8000;
+
+	document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+		const track = root.querySelector<HTMLElement>('[data-track]');
+		if (!track) return;
+
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		const step = () => {
+			const item = track.firstElementChild as HTMLElement | null;
+			const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+			return (item?.offsetWidth ?? track.clientWidth) + gap;
+		};
+		const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+
+		// Avanza una reseña; al llegar al final vuelve al principio.
+		const next = () => {
+			const behavior: ScrollBehavior = reduceMotion ? 'auto' : 'smooth';
+			if (atEnd()) track.scrollTo({ left: 0, behavior });
+			else track.scrollBy({ left: step(), behavior });
+		};
+
+		let hovering = false;
+		let focused = false;
+		let touchedAt = 0;
+		let visible = false;
+		root.addEventListener('pointerenter', (e) => e.pointerType === 'mouse' && (hovering = true));
+		root.addEventListener('pointerleave', () => (hovering = false));
+		root.addEventListener('focusin', () => (focused = true));
+		root.addEventListener('focusout', () => (focused = false));
+		track.addEventListener('touchstart', () => (touchedAt = Date.now()), { passive: true });
+		new IntersectionObserver(([entry]) => (visible = entry.isIntersecting), { threshold: 0.3 }).observe(root);
+
+		setInterval(() => {
+			const recentlyTouched = Date.now() - touchedAt < RESUME_AFTER_TOUCH_MS;
+			if (visible && !hovering && !focused && !recentlyTouched && !document.hidden) next();
+		}, AUTOPLAY_MS);
+	});
+</script>
