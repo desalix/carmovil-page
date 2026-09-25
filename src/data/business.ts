@@ -14,7 +14,7 @@ export const phone = '91 803 43 53';
 export const phoneHref = 'tel:+34918034353';
 
 // Déjalo vacío ('') para no mostrarlo.
-export const email = '';
+export const email = 'info@autotallerescarmovil.es';
 
 // Horario. Cada fila tiene uno o varios tramos; sin tramos se muestra "Cerrado".
 export const hours = [

@@ -32,10 +32,30 @@ const steps = [
 const partnerFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/media/colab/*.{svg,png,jpg,jpeg,webp}', {
 	eager: true,
 });
-const partners = Object.entries(partnerFiles).map(([path, mod]) => {
-	const file = path.split('/').pop()!.replace(/\.[^.]+$/, '');
-	return { src: mod.default, name: file.charAt(0).toUpperCase() + file.slice(1) };
-});
+// Nombre, tamaño y orden de cada logo (la clave es el nombre del archivo sin extensión).
+// Salen en el orden de esta lista. Si un logo no está aquí, sale al final con el nombre del archivo y el tamaño por defecto.
+const partnerInfo: Record<string, { name: string; class?: string }> = {
+	cgaservice: { name: 'CGA Car Service' },
+	petronas: { name: 'Petronas' },
+	// El logo de ASETRA es blanco: brightness-0 lo muestra en negro sobre el fondo claro.
+	'asetra_v5-01_2': { name: 'ASETRA, Asociación Talleres de Automoción', class: 'h-14 w-auto brightness-0' },
+};
+const partnerOrder = Object.keys(partnerInfo);
+const partners = Object.entries(partnerFiles)
+	.map(([path, mod]) => {
+		const file = path.split('/').pop()!.replace(/\.[^.]+$/, '');
+		const info = partnerInfo[file];
+		return {
+			file,
+			src: mod.default,
+			name: info?.name ?? file.charAt(0).toUpperCase() + file.slice(1),
+			class: info?.class ?? 'h-36 w-auto',
+		};
+	})
+	.sort((a, b) => {
+		const rank = (file: string) => (partnerOrder.includes(file) ? partnerOrder.indexOf(file) : partnerOrder.length);
+		return rank(a.file) - rank(b.file);
+	});
 ---
 
 <Layout title={`${name} | Taller mecánico en Tres Cantos`}>
@@ -138,10 +158,11 @@ const partners = Object.entries(partnerFiles).map(([path, mod]) => {
 		<section class="bg-concrete py-16">
 			<div class="mx-auto max-w-6xl px-5 text-center">
 				<h2 class="text-2xl font-extrabold tracking-tight font-stretch-expanded">Colaboramos con</h2>
-				<ul class="mt-10 flex flex-wrap items-center justify-center gap-x-16 gap-y-10">
+				<!-- Cada logo ocupa una columna igual y se centra dentro de ella, así el conjunto queda centrado aunque tengan anchos distintos. -->
+				<ul class="mx-auto mt-10 grid max-w-4xl grid-cols-1 items-center gap-y-10 sm:grid-cols-3 sm:gap-x-10">
 					{partners.map((p) => (
-						<li>
-							<Image src={p.src} alt={p.name} class="h-36 w-auto" />
+						<li class="flex items-center justify-center">
+							<Image src={p.src} alt={p.name} class:list={[p.class, 'max-w-full object-contain']} />
 						</li>
 					))}
 				</ul>
