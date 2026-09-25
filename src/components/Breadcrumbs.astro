@@ -1,0 +1,24 @@
+---
+// Migas de pan: Inicio › Servicios › ... El último elemento es la página actual.
+interface Props {
+	crumbs: { label: string; href: string }[];
+	class?: string;
+}
+
+const { crumbs, class: className } = Astro.props;
+---
+
+<nav aria-label="Migas de pan" class={className}>
+	<ol class="flex flex-wrap items-center gap-x-2 gap-y-1">
+		{crumbs.map((crumb, i) => (
+			<li class="flex items-center gap-2">
+				{i > 0 && <span aria-hidden="true">›</span>}
+				{i < crumbs.length - 1 ? (
+					<a href={crumb.href} class="underline-offset-4 hover:underline">{crumb.label}</a>
+				) : (
+					<span aria-current="page">{crumb.label}</span>
+				)}
+			</li>
+		))}
+	</ol>
+</nav>

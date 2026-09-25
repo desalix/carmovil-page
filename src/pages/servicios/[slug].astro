@@ -13,10 +13,10 @@ interface Props {
 }
 
 const { service } = Astro.props;
+
+// Google corta los títulos de más de ~60 caracteres: si no cabe el nombre completo, usamos el corto.
+const fullTitle = `${service.title} en Tres Cantos | ${name}`;
+const title = fullTitle.length <= 60 ? fullTitle : `${service.title} en Tres Cantos | Carmovil`;
 ---
 
-<ServicesPage
-	service={service}
-	title={`${service.title} en Tres Cantos | ${name}`}
-	description={service.metaDescription}
-/>
+<ServicesPage service={service} title={title} description={service.metaDescription} />

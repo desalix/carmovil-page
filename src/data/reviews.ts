@@ -11,7 +11,11 @@ export interface Review {
 }
 
 // Perfil del taller en Google Maps, para "Ver todas las reseñas".
-export const googleProfileUrl = 'https://maps.app.goo.gl/gKEygdNWA8ns4R299';
+export { googleProfileUrl } from './business';
+
+// Nota media y número total de reseñas en Google, tal como salen en el perfil. Revísalo de vez en cuando.
+// Déjalo en null para no mostrarlo.
+export const googleRating: { value: number; count: number } | null = null;
 
 export const reviews: Review[] = [
 	{

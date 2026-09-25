@@ -1,0 +1,170 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { name, siteUrl, foundedYear, address, mapsUrl, cgaUrl, asetraUrl, petronasUrl } from '../data/business';
+import { reviews } from '../data/reviews';
+
+const facts = [
+	{ label: 'Desde', value: `Agosto de ${foundedYear}` },
+	{ label: 'Marcas', value: 'Todas' },
+	{ label: 'Abierto', value: 'De lunes a viernes' },
+	{ label: 'Diagnóstico', value: 'Maquinaria propia de alta calidad' },
+];
+
+// Redes y marcas con las que trabaja el taller.
+const partners = [
+	{
+		name: 'Red de Talleres CGA',
+		text: 'Somos uno de los talleres de la red CGA. Su distintivo está en nuestra fachada.',
+		url: cgaUrl,
+		linkText: 'Ver nuestra ficha en CGA',
+	},
+	{
+		name: 'ASETRA Madrid',
+		text: 'Formamos parte de ASETRA, la asociación de talleres de reparación de automóviles de Madrid.',
+		url: asetraUrl,
+		linkText: 'Ver nuestra ficha en ASETRA',
+	},
+	{
+		name: 'Petronas',
+		text: 'Trabajamos con lubricantes Petronas para el mantenimiento de tu motor.',
+		url: petronasUrl,
+		linkText: 'Conoce los lubricantes Petronas',
+	},
+];
+
+// Cita de un cliente de hace casi 30 años (reseña de Google).
+const longtimeCustomer = reviews.find((r) => r.author === 'Pio Daniel Morales');
+
+const jsonLd = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'AboutPage',
+		url: `${siteUrl}/nosotros`,
+		name: `Nosotros | ${name}`,
+		inLanguage: 'es-ES',
+		about: { '@id': `${siteUrl}/#taller` },
+	},
+];
+---
+
+<Layout
+	title={`Sobre nosotros: taller familiar en Tres Cantos | Carmovil`}
+	description={`${name} es un taller multimarca familiar en Tres Cantos desde ${foundedYear}. Miembro de la Red de Talleres CGA y de ASETRA Madrid.`}
+	jsonLd={jsonLd}
+>
+	<section class="bg-concrete py-20 md:py-28">
+		<div class="mx-auto grid max-w-6xl gap-14 px-5 lg:grid-cols-[1fr_22rem] lg:gap-20">
+			<div>
+				<h1 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">
+					Un taller familiar desde {foundedYear}
+				</h1>
+				<p class="mt-8 max-w-2xl text-2xl leading-snug font-medium text-asphalt">
+					Nuestros clientes nos conocen por nuestra seriedad, honestidad y veracidad.
+				</p>
+				<div class="mt-8 max-w-152 space-y-5 leading-relaxed text-zinc-700">
+					<p>
+						{name} se fundó el 6 de agosto de {foundedYear} como empresa familiar, y así seguimos. Somos un taller
+						multimarca: reparamos coches de todas las marcas y modelos, y muchos de nuestros clientes llevan décadas
+						confiándonos su coche.
+					</p>
+					<p>
+						Nos ocupamos de todo el coche: revisiones, elementos de desgaste, PRE-ITV, mantenimiento dentro y fuera
+						de garantía, electricidad y electrónica, inyección diésel y gasolina, frenos y ABS, aire acondicionado,
+						neumáticos y reparaciones complejas. También reparamos coches híbridos.
+					</p>
+					<p>
+						Nuestra nave, en {address.street} ({address.city}), está equipada con maquinaria de alta calidad para el
+						diagnóstico de fallos.
+					</p>
+				</div>
+			</div>
+
+			<aside class="lg:top-24 lg:self-start pt-16">
+				<dl class="rounded-lg bg-brand-dark p-8 text-gray-100">
+					{facts.map((fact, i) => (
+						<div class:list={['py-4 first:pt-0 last:pb-0', i > 0 && 'border-t border-asphalt/20']}>
+							<dt class="text-sm font-semibold">{fact.label}</dt>
+							<dd class="mt-1 text-xl leading-snug font-bold font-stretch-semi-expanded">{fact.value}</dd>
+						</div>
+					))}
+				</dl>
+			</aside>
+		</div>
+	</section>
+
+	<!-- Redes y marcas -->
+	<section class="py-20 md:py-24">
+		<div class="mx-auto max-w-6xl px-5">
+			<h2 class="text-3xl font-extrabold tracking-tight font-stretch-expanded md:text-4xl">Con quién trabajamos</h2>
+			<ul class="mt-10 grid gap-10 md:grid-cols-3 md:gap-12">
+				{partners.map((partner) => (
+					<li class="border-t-2 border-brand pt-6">
+						<h3 class="text-xl font-bold font-stretch-semi-expanded">{partner.name}</h3>
+						<p class="mt-3 leading-relaxed text-zinc-700">{partner.text}</p>
+						{partner.url && (
+							<a
+								href={partner.url}
+								target="_blank"
+								rel="noopener"
+								class="mt-4 inline-block font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt"
+							>
+								{partner.linkText}
+							</a>
+						)}
+					</li>
+				))}
+			</ul>
+		</div>
+	</section>
+
+	<!-- Cita de un cliente -->
+	{longtimeCustomer && (
+		<section class="bg-asphalt py-20 text-white md:py-24">
+			<figure class="mx-auto max-w-4xl px-5 text-center">
+				<blockquote class="text-2xl leading-snug font-medium md:text-3xl md:leading-snug">
+					<p>
+						“Llevo casi 30 años siendo cliente de este taller, es pequeño, pero con personal dispuesto a ayudar al
+						cliente […] Me gusta por los trabajos que realizan y por la empatía en el trato personal.”
+					</p>
+				</blockquote>
+				<figcaption class="mt-8 text-zinc-300">
+					<span class="font-bold text-white">{longtimeCustomer.author}</span>, en{' '}
+					<a
+						href={longtimeCustomer.url}
+						target="_blank"
+						rel="noopener nofollow"
+						class="underline decoration-brand decoration-2 underline-offset-4 hover:text-white"
+					>
+						Google
+					</a>
+				</figcaption>
+			</figure>
+		</section>
+	)}
+
+	<!-- Visítanos -->
+	<section class="py-20 md:py-24">
+		<div class="mx-auto flex max-w-6xl flex-col items-start justify-between gap-8 px-5 md:flex-row md:items-center">
+			<div>
+				<h2 class="text-3xl font-extrabold tracking-tight font-stretch-expanded md:text-4xl">Ven a conocernos</h2>
+				<p class="mt-4 text-lg text-zinc-700">{address.street}, {address.city}</p>
+			</div>
+			<div class="flex flex-wrap gap-3">
+				<a
+					href={mapsUrl}
+					target="_blank"
+					rel="noopener"
+					class="rounded-md bg-brand-dark px-6 py-3 font-bold text-white transition-colors hover:bg-asphalt"
+				>
+					Cómo llegar
+				</a>
+				<a
+					href="/#contacto"
+					class="rounded-md px-6 py-3 font-semibold ring-1 ring-zinc-300 transition-colors hover:ring-asphalt"
+				>
+					Ver horario
+				</a>
+			</div>
+		</div>
+	</section>
+</Layout>

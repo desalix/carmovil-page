@@ -1,30 +1,136 @@
 ---
 import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wdth-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PhoneButton from '../components/PhoneButton.astro';
+import hero from '../assets/hero.jpg';
+import logo from '../assets/logo.png';
+import {
+	name,
+	siteUrl,
+	foundingDate,
+	address,
+	geo,
+	areasServed,
+	phoneHref,
+	email,
+	mapsUrl,
+	openingHoursSpecification,
+	googleProfileUrl,
+	cgaUrl,
+	asetraUrl,
+} from '../data/business';
 
 interface Props {
 	title: string;
 	description?: string;
+	// Imagen para compartir en redes (WhatsApp, Facebook...). Por defecto, la fachada del taller.
+	image?: ImageMetadata;
+	imageAlt?: string;
+	// 'noindex' en páginas que no deben salir en Google (p. ej. la 404).
+	robots?: string;
+	// Datos estructurados propios de la página (se añaden a los del taller).
+	jsonLd?: Record<string, unknown>[];
 }
 
 const {
 	title,
 	description = 'Taller mecánico multimarca en Tres Cantos desde 1991. Mantenimiento, PRE-ITV, diagnóstico y reparación de coches de todas las marcas.',
+	image = hero,
+	imageAlt = `Fachada de ${name} en ${address.street}, ${address.locality}`,
+	robots,
+	jsonLd = [],
 } = Astro.props;
+
+const site = Astro.site ?? new URL(siteUrl);
+// URL canónica sin barra final ni .html (salvo la home).
+const canonical = new URL(Astro.url.pathname.replace(/(\/index)?(\.html)?\/*$/, '') || '/', site).href;
+
+// Proporción 1.91:1 que usan las redes. Sin agrandar la foto si es más pequeña de 1200 px.
+const ogWidth = Math.min(1200, image.width);
+const ogHeight = Math.round((ogWidth * 630) / 1200);
+const ogImage = await getImage({ src: image, width: ogWidth, height: ogHeight, fit: 'cover', format: 'jpg' });
+const ogImageUrl = new URL(ogImage.src, site).href;
+const logoImage = await getImage({ src: logo, format: 'png' });
+
+const businessId = `${siteUrl}/#taller`;
+const structuredData = [
+	{
+		'@context': 'https://schema.org',
+		'@type': 'AutoRepair',
+		'@id': businessId,
+		name,
+		url: `${siteUrl}/`,
+		logo: new URL(logoImage.src, site).href,
+		image: ogImageUrl,
+		telephone: phoneHref.replace('tel:', ''),
+		...(email && { email }),
+		foundingDate,
+		priceRange: '€€',
+		address: {
+			'@type': 'PostalAddress',
+			streetAddress: address.street,
+			postalCode: address.postalCode,
+			addressLocality: address.locality,
+			addressRegion: address.region,
+			addressCountry: address.country,
+		},
+		...(geo && { geo: { '@type': 'GeoCoordinates', ...geo } }),
+		hasMap: mapsUrl,
+		areaServed: areasServed.map((area) => ({ '@type': 'City', name: area })),
+		openingHoursSpecification: openingHoursSpecification.map((h) => ({ '@type': 'OpeningHoursSpecification', ...h })),
+		sameAs: [googleProfileUrl, cgaUrl, asetraUrl],
+	},
+	{
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		'@id': `${siteUrl}/#web`,
+		name,
+		url: `${siteUrl}/`,
+		inLanguage: 'es-ES',
+		publisher: { '@id': businessId },
+	},
+	...jsonLd,
+];
 ---
 
 <html lang="es">
 	<head>
 		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		{robots && <meta name="robots" content={robots} />}
+		{!robots?.includes('noindex') && <link rel="canonical" href={canonical} />}
+
+		<link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin />
+
 		<link rel="icon" href="/favicon.ico" sizes="48x48" />
 		<link rel="icon" type="image/png" href="/favicon.png" sizes="192x192" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<meta name="description" content={description} />
-		<title>{title}</title>
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#00706C" />
+
+		<!-- Vista previa al compartir el enlace (WhatsApp, Facebook, X...) -->
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="es_ES" />
+		<meta property="og:site_name" content={name} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta property="og:image" content={ogImageUrl} />
+		<meta property="og:image:width" content={String(ogWidth)} />
+		<meta property="og:image:height" content={String(ogHeight)} />
+		<meta property="og:image:alt" content={imageAlt} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImageUrl} />
+
+		<!-- Datos del taller para Google -->
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 		<slot name="head" />
 	</head>
 	<body class="flex min-h-screen flex-col bg-white font-sans text-asphalt antialiased">

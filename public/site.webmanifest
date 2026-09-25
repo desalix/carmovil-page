@@ -1,0 +1,13 @@
+{
+  "name": "Autotalleres Carmovil",
+  "short_name": "Carmovil",
+  "lang": "es",
+  "start_url": "/",
+  "display": "browser",
+  "theme_color": "#00706C",
+  "background_color": "#ffffff",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}

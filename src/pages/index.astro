@@ -1,12 +1,24 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import ServiceList from '../components/ServiceList.astro';
 import Reviews from '../components/Reviews.astro';
 import hero from '../assets/hero.jpg';
-import oilChange from '../assets/media/aux/taller1.jpg';
 import mechanic from '../assets/media/aux/taller2.jpg';
-import { name, address, phone, phoneHref, mapsEmbedUrl, hours, foundedYear } from '../data/business';
+import {
+	name,
+	address,
+	phone,
+	phoneHref,
+	mapsUrl,
+	mapsEmbedUrl,
+	hours,
+	foundedYear,
+	areasServed,
+	cgaUrl,
+	asetraUrl,
+	petronasUrl,
+} from '../data/business';
 
 // Cómo trabajamos: es un proceso en orden, por eso va numerado.
 const steps = [
@@ -34,11 +46,11 @@ const partnerFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/med
 });
 // Nombre, tamaño y orden de cada logo (la clave es el nombre del archivo sin extensión).
 // Salen en el orden de esta lista. Si un logo no está aquí, sale al final con el nombre del archivo y el tamaño por defecto.
-const partnerInfo: Record<string, { name: string; class?: string }> = {
-	cgaservice: { name: 'CGA Car Service' },
-	petronas: { name: 'Petronas' },
+const partnerInfo: Record<string, { name: string; class?: string; url?: string }> = {
+	cgaservice: { name: 'CGA Car Service', url: cgaUrl },
+	petronas: { name: 'Petronas', url: petronasUrl },
 	// El logo de ASETRA es blanco: brightness-0 lo muestra en negro sobre el fondo claro.
-	'asetra_v5-01_2': { name: 'ASETRA, Asociación Talleres de Automoción', class: 'h-14 w-auto brightness-0' },
+	'asetra_v5-01_2': { name: 'ASETRA, Asociación Talleres de Automoción', class: 'h-14 w-auto brightness-0', url: asetraUrl },
 };
 const partnerOrder = Object.keys(partnerInfo);
 const partners = Object.entries(partnerFiles)
@@ -50,37 +62,93 @@ const partners = Object.entries(partnerFiles)
 			src: mod.default,
 			name: info?.name ?? file.charAt(0).toUpperCase() + file.slice(1),
 			class: info?.class ?? 'h-36 w-auto',
+			url: info?.url,
 		};
 	})
 	.sort((a, b) => {
 		const rank = (file: string) => (partnerOrder.includes(file) ? partnerOrder.indexOf(file) : partnerOrder.length);
 		return rank(a.file) - rank(b.file);
 	});
+
+// Preguntas frecuentes. Salen en la home y como datos para Google (FAQPage).
+const faqs = [
+	{
+		q: '¿Reparáis coches de cualquier marca?',
+		a: `Sí. Somos un taller multimarca: desde ${foundedYear} reparamos y mantenemos coches de todas las marcas y modelos, también híbridos.`,
+	},
+	{
+		q: '¿Puedo hacer las revisiones aquí sin perder la garantía del fabricante?',
+		a: 'Sí. Hacemos las revisiones siguiendo el plan de mantenimiento del fabricante, así que puedes mantener tu coche con nosotros también mientras está en garantía.',
+	},
+	{
+		q: '¿Cómo pido cita?',
+		a: `Llámanos al ${phone}, de lunes a viernes. Te damos cita lo antes posible.`,
+	},
+	{
+		q: '¿Me dais presupuesto antes de reparar?',
+		a: 'Sí. Primero diagnosticamos el coche con maquinaria especializada, te explicamos qué hace falta y cuánto cuesta, y no empezamos hasta que nos das el visto bueno.',
+	},
+	{
+		q: '¿Revisáis el coche antes de pasar la ITV?',
+		a: 'Sí. Con la revisión PRE-ITV comprobamos los mismos puntos que se miran en la inspección y reparamos lo necesario para que pases a la primera.',
+	},
+	{
+		q: '¿Dónde está el taller?',
+		a: `En ${address.street}, ${address.postalCode} ${address.city}. Atendemos a clientes de ${areasServed.slice(0, -1).join(', ')} y ${areasServed.at(-1)}.`,
+	},
+];
+
+const faqJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((f) => ({
+		'@type': 'Question',
+		name: f.q,
+		acceptedAnswer: { '@type': 'Answer', text: f.a },
+	})),
+};
 ---
 
-<Layout title={`${name} | Taller mecánico en Tres Cantos`}>
+<Layout
+	title={`Taller mecánico en Tres Cantos | ${name}`}
+	description={`Taller mecánico multimarca en Tres Cantos desde ${foundedYear}: revisiones, PRE-ITV, diagnóstico, frenos e híbridos. Pide cita en el ${phone}.`}
+	jsonLd={[faqJsonLd]}
+>
 	<!-- Hero -->
 	<section class="relative bg-concrete">
 		<div class="mx-auto grid max-w-6xl px-5 lg:grid-cols-2">
 			<div class="py-18 md:py-20 lg:py-32 lg:pr-18">
-				<h1 class="text-[2.6rem] leading-[1.2] font-black tracking-tight font-stretch-expanded sm:text-6xl lg:text-[4rem]">
+				<p class="text-[2.6rem] leading-[1.2] font-black tracking-tight font-stretch-expanded sm:text-6xl lg:text-[4rem]">
 					CARMOVIL
-				</h1>
+				</p>
+				<h1 class="mt-3 text-xl font-bold font-stretch-semi-expanded sm:text-2xl">Taller mecánico en Tres Cantos</h1>
 				<p class="mt-7 max-w-136 text-lg leading-relaxed text-black">
 					Mantenimiento, diagnóstico y reparación de cualquier marca, también híbridos. Un taller familiar desde {foundedYear}.
 				</p>
-				<br>
-				<p class="mt-7 max-w-136 text-lg leading-relaxed text-black">
-                    C/ La Fragua 12 Tres Cantos, Madrid
-				</p>
+				<address class="mt-7 max-w-136 text-lg leading-relaxed text-black not-italic">
+					{address.street}, {address.postalCode} {address.city}
+				</address>
+				<a
+					href={phoneHref}
+					class="mt-8 inline-flex items-center gap-2 rounded-md bg-brand-dark px-6 py-3 font-bold text-white transition-colors hover:bg-asphalt"
+				>
+					<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+						<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2" />
+					</svg>
+					Pide cita: {phone}
+				</a>
 			</div>
 		</div>
 		<div class="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-			<Image
+			<Picture
 				src={hero}
-				alt={`Fachada de ${name} en ${address.street}, ${address.city}`}
+				formats={['avif', 'webp']}
+				alt={`Fachada del taller mecánico ${name} en ${address.street}, ${address.locality}`}
+				widths={[320, 480, hero.width]}
+				sizes="(min-width: 1024px) 50vw, 100vw"
 				class="aspect-6/5 h-full w-full object-cover lg:aspect-auto"
 				loading="eager"
+				fetchpriority="high"
 			/>
 		</div>
 	</section>
@@ -125,9 +193,10 @@ const partners = Object.entries(partnerFiles)
 	<section id="servicios" class="relative scroll-mt-16">
 		<!-- Foto a sangre por la izquierda en escritorio (como el hero, pero al otro lado). En móvil no se muestra: quedaría pegada a la foto del hero. -->
 		<div class="hidden lg:absolute lg:inset-y-0 lg:left-0 lg:block lg:w-[calc(50%-2rem)]">
-			<Image
+			<Picture
 				src={mechanic}
-				alt="Mecánico revisando el motor de un coche"
+				formats={['avif', 'webp']}
+				alt="Mecánico revisando el motor de un coche en el taller de Tres Cantos"
 				width={1440}
 				widths={[640, 960, 1440]}
 				sizes="50vw"
@@ -162,7 +231,13 @@ const partners = Object.entries(partnerFiles)
 				<ul class="mx-auto mt-10 grid max-w-4xl grid-cols-1 items-center gap-y-10 sm:grid-cols-3 sm:gap-x-10">
 					{partners.map((p) => (
 						<li class="flex items-center justify-center">
-							<Image src={p.src} alt={p.name} class:list={[p.class, 'max-w-full object-contain']} />
+							{p.url ? (
+								<a href={p.url} target="_blank" rel="noopener">
+									<Image src={p.src} alt={p.name} class:list={[p.class, 'max-w-full object-contain']} />
+								</a>
+							) : (
+								<Image src={p.src} alt={p.name} class:list={[p.class, 'max-w-full object-contain']} />
+							)}
 						</li>
 					))}
 				</ul>
@@ -178,7 +253,7 @@ const partners = Object.entries(partnerFiles)
 				<div class="mt-8 flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
 					<address class="text-lg leading-relaxed not-italic">
 						<p class="font-semibold">{address.street}</p>
-						<p class="text-zinc-600">{address.city}</p>
+						<p class="text-zinc-600">{address.postalCode} {address.city}</p>
 					</address>
 					<a
 						href={phoneHref}
@@ -210,15 +285,96 @@ const partners = Object.entries(partnerFiles)
 				</table>
 			</div>
 
-			<iframe
-				title={`Mapa: ${name}, ${address.street}, ${address.city}`}
-				src={mapsEmbedUrl}
-				class="aspect-4/3 w-full rounded-lg border-0 bg-concrete lg:aspect-auto lg:min-h-112"
-				loading="lazy"
-				referrerpolicy="no-referrer-when-downgrade"></iframe>
+			<!-- El mapa de Google solo se carga al pulsar: así la página carga más rápido. -->
+			<div
+				data-map
+				data-src={mapsEmbedUrl}
+				data-title={`Mapa: ${name}, ${address.street}, ${address.city}`}
+				class="relative grid aspect-4/3 w-full place-items-center overflow-hidden rounded-lg bg-concrete lg:aspect-auto lg:min-h-112"
+			>
+				<div class="flex flex-col items-center gap-4 p-6 text-center">
+					<svg class="size-10 text-brand-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+						<path stroke-linejoin="round" d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z" />
+						<circle cx="12" cy="9.5" r="2.5" />
+					</svg>
+					<p class="font-semibold">{address.street}, {address.postalCode} {address.locality}</p>
+					<div class="flex flex-wrap justify-center gap-3">
+						<button
+							type="button"
+							data-map-load
+							class="rounded-md bg-brand-dark px-5 py-2.5 font-bold text-white transition-colors hover:bg-asphalt"
+						>
+							Ver mapa
+						</button>
+						<a
+							href={mapsUrl}
+							target="_blank"
+							rel="noopener"
+							class="rounded-md bg-white px-5 py-2.5 font-semibold ring-1 ring-zinc-300 transition-colors hover:ring-asphalt"
+						>
+							Abrir en Google Maps
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Zonas -->
+	<section class="bg-concrete py-16 md:py-20">
+		<div class="mx-auto max-w-6xl px-5">
+			<h2 class="text-3xl font-extrabold font-stretch-expanded md:text-4xl">
+				Tu taller de confianza en la zona norte de Madrid
+			</h2>
+			<p class="mt-6 max-w-5xl text-lg text-zinc-700 text-center">
+				Desde {foundedYear} somos el taller mecánico de muchos vecinos de Tres Cantos. También vienen clientes de{' '}
+				{areasServed.slice(1, -1).join(', ')} y {areasServed.at(-1)}: coches de todas las marcas, de gasolina, diésel e
+				híbridos, con el mismo trato cercano de siempre.
+			</p>
 		</div>
 	</section>
 
 	<!-- Reseñas -->
 	<Reviews />
+
+	<!-- Preguntas frecuentes -->
+	<section class="py-20 md:py-28">
+		<div class="mx-auto max-w-4xl px-5">
+			<h2 class="text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">Preguntas frecuentes</h2>
+			<div class="mt-10 border-t-2 border-brand">
+				{faqs.map((f) => (
+					<details class="group border-b border-zinc-200 py-5">
+						<summary class="flex cursor-pointer list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
+							<h3 class="text-lg font-bold font-stretch-semi-expanded">{f.q}</h3>
+							<svg
+								class="size-5 shrink-0 text-brand-dark transition-transform group-open:rotate-180 motion-reduce:transition-none"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2.5"
+								aria-hidden="true"
+							>
+								<path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" />
+							</svg>
+						</summary>
+						<p class="mt-3 leading-relaxed text-zinc-700">{f.a}</p>
+					</details>
+				))}
+			</div>
+		</div>
+	</section>
 </Layout>
+
+<script>
+	// Mapa: cambia el recuadro por el mapa de Google al pulsar "Ver mapa".
+	document.querySelectorAll<HTMLElement>('[data-map]').forEach((box) => {
+		box.querySelector('[data-map-load]')?.addEventListener('click', () => {
+			const iframe = document.createElement('iframe');
+			iframe.src = box.dataset.src ?? '';
+			iframe.title = box.dataset.title ?? '';
+			iframe.referrerPolicy = 'no-referrer-when-downgrade';
+			iframe.className = 'absolute inset-0 size-full border-0';
+			box.replaceChildren(iframe);
+		});
+	});
+</script>

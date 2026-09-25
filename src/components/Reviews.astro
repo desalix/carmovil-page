@@ -1,7 +1,7 @@
 ---
 // Reseñas de Google en carrusel automático: 4 a la vez en pantallas grandes (3, 2 y 1 en más pequeñas).
 // Avanza solo cada pocos segundos; se pausa mientras el ratón está encima o alguien lo desliza con el dedo.
-import { reviews, googleProfileUrl } from '../data/reviews';
+import { reviews, googleProfileUrl, googleRating } from '../data/reviews';
 
 const starPath =
 	'M12 2.5l2.94 5.96 6.56.95-4.75 4.63 1.12 6.54L12 17.5l-5.87 3.08 1.12-6.54L2.5 9.41l6.56-.95L12 2.5z';
@@ -12,6 +12,12 @@ const starPath =
 		<h2 id="reviews-title" class="text-center text-4xl font-extrabold tracking-tight font-stretch-expanded md:text-5xl">
 			Lo que dicen nuestros clientes
 		</h2>
+		{googleRating && (
+			<p class="mt-4 text-center text-lg text-zinc-700">
+				<strong class="text-asphalt">{googleRating.value.toLocaleString('es-ES')} de 5</strong> en Google, con{' '}
+				{googleRating.count} reseñas
+			</p>
+		)}
 
 		<div class="mt-12" data-carousel>
 			<ul
@@ -23,7 +29,7 @@ const starPath =
 						<a
 							href={review.url}
 							target="_blank"
-							rel="noopener"
+							rel="noopener nofollow"
 							class="flex h-full flex-col items-center rounded-lg bg-white p-6 text-center ring-1 ring-zinc-200 transition-shadow hover:ring-2 hover:ring-brand"
 						>
 							<p class="font-bold">{review.author}</p>
@@ -53,7 +59,7 @@ const starPath =
 			<a
 				href={googleProfileUrl}
 				target="_blank"
-				rel="noopener"
+				rel="noopener nofollow"
 				class="font-semibold text-brand-dark underline decoration-2 underline-offset-4 hover:text-asphalt"
 			>
 				Ver todas las reseñas en Google
