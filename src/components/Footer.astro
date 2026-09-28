@@ -15,7 +15,7 @@ const year = new Date().getFullYear();
 				<Image src={logo} alt={`${name}, inicio`} class="h-14 w-auto brightness-0 invert" />
 			</a>
 			<p class="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-zinc-400 md:mx-0">
-				Taller mecánico multimarca en Tres Cantos desde {foundedYear}.
+				Taller mecánico multimarca en Tres Cantos <br> desde {foundedYear}.
 			</p>
 		</div>
 
@@ -24,12 +24,6 @@ const year = new Date().getFullYear();
 			<address class="mt-3 space-y-1.5 text-sm not-italic">
 				<p>{address.street}<br />{address.postalCode} {address.city}</p>
 				<p><a href={phoneHref} class="hover:text-white">{phone}</a></p>
-				{email && <p><a href={`mailto:${email}`} class="hover:text-white">{email}</a></p>}
-				<p>
-					<a href={googleProfileUrl} target="_blank" rel="noopener" class="underline underline-offset-4 hover:text-white">
-						Déjanos una reseña en Google
-					</a>
-				</p>
 			</address>
 		</div>
 
