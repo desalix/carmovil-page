@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Tiene que coincidir con el nombre del proyecto en Cloudflare.
+  "name": "carmovil-page",
+  "compatibility_date": "2026-09-28",
+  // Web estática: Cloudflare sirve directamente lo que genera `npm run build` en dist/.
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
